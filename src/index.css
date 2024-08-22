@@ -131,7 +131,7 @@
 .details-box-header h4 {
   color: #fff;
   font-weight: 500;
-  font-size: 24px;
+  
 }
 
 /* switch */
@@ -247,7 +247,7 @@
 .weather-details-container .details .city-name {
   color: #fff;
   font-weight: 500;
-  font-size: 24px;
+
 }
 
 .weather-details-container .details .icon-and-temp {
@@ -306,7 +306,7 @@
   margin-top: 25px;
  
   font-weight: 500;
-  font-size: 24px;
+  
 }
 
 .extended-forecasts-container {
