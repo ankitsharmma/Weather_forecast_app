@@ -1,0 +1,34 @@
+trigger:
+- main
+
+pool:
+  name: Default
+
+steps:
+
+- task: NodeTool@0
+  inputs:
+    versionSpec: '18.x'
+
+- script: |
+    npm install
+    npm run build
+  displayName: Build React App
+
+- task: CopyFilesOverSSH@0
+  inputs:
+    sshEndpoint: 'react-vm-ssh'
+    sourceFolder: '$(System.DefaultWorkingDirectory)/dist'
+    targetFolder: '/tmp/react-app'
+    cleanTargetFolder: true
+
+- task: SSH@0
+  inputs:
+    sshEndpoint: 'react-vm-ssh'
+    runOptions: 'commands'
+    commands: |
+      sudo apt update
+      sudo apt install nginx -y
+      sudo rm -rf /var/www/html/*
+      sudo cp -r /tmp/react-app/* /var/www/html/
+      sudo systemctl restart nginx
