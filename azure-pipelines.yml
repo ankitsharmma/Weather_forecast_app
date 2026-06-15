@@ -15,10 +15,23 @@ steps:
     npm run build
   displayName: Build React App
 
+- script: |
+    echo ===== ROOT FILES =====
+    dir
+
+    echo ===== DIST CHECK =====
+    if exist dist (
+      echo DIST FOUND
+      dir dist
+    ) else (
+      echo DIST NOT FOUND
+    )
+  displayName: Verify Dist Folder
+
 - task: CopyFilesOverSSH@0
   inputs:
     sshEndpoint: 'react-vm-ssh'
-    sourceFolder: '$(System.DefaultWorkingDirectory)/dist'
+    sourceFolder: '$(System.DefaultWorkingDirectory)\dist'
     targetFolder: '/tmp/react-app'
     cleanTargetFolder: true
 
@@ -27,8 +40,7 @@ steps:
     sshEndpoint: 'react-vm-ssh'
     runOptions: 'commands'
     commands: |
-      sudo apt update
-      sudo apt install nginx -y
+      sudo mkdir -p /var/www/html
       sudo rm -rf /var/www/html/*
       sudo cp -r /tmp/react-app/* /var/www/html/
       sudo systemctl restart nginx
